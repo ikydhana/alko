@@ -31,23 +31,26 @@
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama Pelapor","name"=>"nama_pelapor"];
-			$this->col[] = ["label"=>"Satuan Kerja","name"=>"satuan_kerja"];
+			$this->col[] = ["label"=>"Satuan Kerja","name"=>"satuan_kerja","join"=>"tb_skpd,satuan_kerja"];
 			$this->col[] = ["label"=>"Isi Ticket","name"=>"isi_ticket"];
+			$this->col[] = ["label"=>"Tanggal Masuk","name"=>"created_at"];
 			$this->col[] = ["label"=>"Tindak Lanjut","name"=>"id_tindak_lanjut","join"=>"tb_tindak_lanjut,nama_tindak_lanjut"];
-			$this->col[] = ["label"=>"Permasalahan","name"=>"id_permasalahan","join"=>"tb_permasalahan,permasalahan"];
-			$this->col[] = ["label"=>"Status Ticket","name"=>"status_ticket"];
+			$this->col[] = ["label"=>"Jenis Kendala","name"=>"id_bidang_keahlian","join"=>"tb_bidang_keahlian,bidang_keahlian"];
+			$this->col[] = ["label"=>"Status Ticket","name"=>"status"];
+			// $this->col[] = ["label"=>"Tanggal Selesai","name"=>"updated_at"];
+			$this->col[] = ["label"=>"Petugas Pelaksana","name"=>"id_petugas","join"=>"tb_petugas,nama_petugas"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama Pelapor','name'=>'nama_pelapor','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Satuan Kerja','name'=>'satuan_kerja','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Satuan Kerja','name'=>'satuan_kerja','type'=>'datamodal','datamodal_table'=>'tb_skpd','datamodal_where'=>'','datamodal_columns'=>'satuan_kerja,email','datamodal_columns_alias'=>'Nama Instansi,Email','required'=>true];
 			$this->form[] = ['label'=>'Isi Ticket','name'=>'isi_ticket','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
-			$this->form[] = ['label'=>'Permasalahan','name'=>'id_permasalahan','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'tb_permasalahan,permasalahan'];
-			$this->form[] = ['label'=>'Status Ticket','name'=>'status_ticket','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Langkah Penanganan','name'=>'id_langkah_penanganan','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_langkah_penanganan,langkah_penanganan'];
-			$this->form[] = ['label'=>'Petugas ','name'=>'id_petugas','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_petugas,nama_petugas'];
+			$this->form[] = ['label'=>'Jenis Kendala','name'=>'id_bidang_keahlian','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_bidang_keahlian,bidang_keahlian'];
+			$this->form[] = ['label'=>'Status Ticket','name'=>'status','type'=>'text','value'=>'Belum Selesai','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
+			// $this->form[] = ['label'=>'Petugas ','name'=>'id_petugas','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_petugas,nama_petugas'];
+			$this->form[] = ['label'=>'Petugas','name'=>'id_petugas','type'=>'datamodal','datamodal_table'=>'tb_petugas','datamodal_where'=>'','datamodal_columns'=>'nip,nama_petugas','datamodal_columns_alias'=>'NIP,Nama Petugas','required'=>true];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -88,7 +91,9 @@
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        | 
 	        */
-	        $this->addaction = array();
+			$this->addaction = array();
+			$this->addaction[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'icon'=>'fa fa-check','color'=>'success']; 
+
 
 
 	        /* 
@@ -147,8 +152,8 @@
 	        | @label, @count, @icon, @color 
 	        |
 	        */
-	        $this->index_statistic = array();
-
+			$this->index_statistic = array();
+			$this->index_statistic[] = ['label'=>'Total Laporan','count'=>DB::table('tb_lapor')->count(),'icon'=>'fa fa-check','color'=>'success'];
 
 
 	        /*
@@ -246,7 +251,8 @@
 	    |
 	    */
 	    public function hook_query_index(&$query) {
-	        //Your code here
+			//Your code here
+			$query->where('id_petugas','nama_petugas');
 	            
 	    }
 
@@ -331,8 +337,12 @@
 	    public function hook_after_delete($id) {
 	        //Your code here
 
-	    }
+		}
 
+		public function getSetStatus($status,$id) {
+			DB::table('tb_lapor')->where('id',$id)->update(['status'=>$status]);
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
+		}
 
 
 	    //By the way, you can still create your own method in here... :) 

@@ -75,7 +75,7 @@
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        | 
 	        */
-	        $this->addaction = array();
+			$this->addaction = array();
 
 
 	        /* 
@@ -319,7 +319,6 @@
 	        //Your code here
 
 	    }
-
 
 
 	    //By the way, you can still create your own method in here... :) 

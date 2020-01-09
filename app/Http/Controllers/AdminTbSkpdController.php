@@ -5,56 +5,45 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminTbLangkahPenangananController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminTbSkpdController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "id";
+			$this->title_field = "nama_instansi";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = true;
-			$this->button_bulk_action = true;
+			$this->button_table_action = false;
+			$this->button_bulk_action = false;
 			$this->button_action_style = "button_icon";
-			$this->button_add = true;
-			$this->button_edit = true;
-			$this->button_delete = true;
-			$this->button_detail = true;
-			$this->button_verification = true;
+			$this->button_add = false;
+			$this->button_edit = false;
+			$this->button_delete = false;
+			$this->button_detail = false;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "tb_langkah_penanganan";
+			$this->table = "tb_skpd";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Laporan","name"=>"id_laporan","join"=>"tb_lapor,isi_ticket"];
-			$this->col[] = ["label"=>"Tindak Lanjut","name"=>"id_tindak_lanjut","join"=>"tb_tindak_lanjut,nama_tindak_lanjut"];
-			$this->col[] = ["label"=>"Permasalahan","name"=>"permasalahan"];
-			$this->col[] = ["label"=>"Langkah Penanganan","name"=>"langkah_penanganan"];
-			$this->col[] = ["label"=>"Foto Lapangan","name"=>"pic_lap","image"=>true];
+			$this->col[] = ["label"=>"Nama Instansi","name"=>"satuan_kerja"];
+			$this->col[] = ["label"=>"Email","name"=>"email"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Laporan','name'=>'id_laporan','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,isi_ticket'];
-			$this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
-			$this->form[] = ['label'=>'Permasalahan','name'=>'permasalahan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Langkah Penanganan','name'=>'langkah_penanganan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			// $this->form[] = ['label'=>'Foto Lapangan','name'=>'pic_lap','type'=>'upload','validation'=>'image','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nama Instansi','name'=>'satuan_kerja','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:tb_skpd','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Laporan','name'=>'id_laporan','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,isi_ticket'];
-			//$this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
-			//$this->form[] = ['label'=>'Permasalahan','name'=>'permasalahan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Langkah Penanganan','name'=>'langkah_penanganan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Foto Lapangan','name'=>'pic_lap','type'=>'upload','validation'=>'image'];
-			//// $this->form[] = ['label'=>'Status Ticket','name'=>'status','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,status','readonly'=>'true'];
+			//$this->form[] = ["label"=>"Nama Instansi","name"=>"nama_instansi","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Email","name"=>"email","type"=>"email","required"=>TRUE,"validation"=>"required|min:1|max:255|email|unique:tb_skpd","placeholder"=>"Please enter a valid email address"];
 			# OLD END FORM
 
 			/* 
@@ -75,7 +64,7 @@
 	        /* 
 	        | ---------------------------------------------------------------------- 
 	        | Add More Action Button / Menu
-	        | -------------------	---------------------------------------------------     
+	        | ----------------------------------------------------------------------     
 	        | @label       = Label of action 
 	        | @url         = Target URL, you can use field alias. e.g : [id], [name], [title], etc
 	        | @icon        = Font awesome class icon. e.g : fa fa-bars
@@ -83,8 +72,8 @@
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        | 
 	        */
-			$this->addaction = array();
-			// $this->addaction[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'icon'=>'fa fa-check','color'=>'success']; 
+	        $this->addaction = array();
+
 
 	        /* 
 	        | ---------------------------------------------------------------------- 
@@ -274,13 +263,9 @@
 	    | @id = last insert id
 	    | 
 	    */
-	    public function hook_after_add($id){
+	    public function hook_after_add($id) {        
 	        //Your code here
-		$config['content'] = "Pekerjaan telah selesai";
-		$config['notification_command'] = CRUDBooster::myId();
-		$config['to'] = CRUDBooster::adminPath('../tb_lapor/add?id=[id]');
-		$config['id_cms_users'] = [1]; //The Id of the user that is going to receive notification.
-		CRUDBooster::sendNotification($config);
+
 	    }
 
 	    /* 
@@ -332,10 +317,7 @@
 
 	    }
 
-		// public function getSetStatus($status,$id) {
-		// 	DB::table('tb_lapor')->where('id',$id)->update(['status'=>$status]);
-		// 	CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
-		// }
+
 
 	    //By the way, you can still create your own method in here... :) 
 

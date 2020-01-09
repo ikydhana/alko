@@ -1,5 +1,21 @@
 <!-- Main Header -->
 <header class="main-header">
+<style>
+.text{
+    display: block;
+    color:white;
+    float: left;
+    height: 50px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 50px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding: 0 15px;
+    font-weight: 300;
+    overflow: hidden;
+
+}
+</style>
 
     <!-- Logo -->
     <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}' class="logo">{{CRUDBooster::getSetting('appname')}}</a>
@@ -10,9 +26,12 @@
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
+        <div class="text">
+        <p>Aplikasi Lapor Kendala Online</p>
+        </div>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav"> 
 
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title='Notifications' aria-expanded="false">
