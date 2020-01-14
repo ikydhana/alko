@@ -3,7 +3,7 @@
   </head>
 <body>
 
-@foreach($tb_lapor as $data_lapor)
+@foreach($tb_petugas as $data_petugas)
 
 @endforeach
 
@@ -27,22 +27,15 @@
     Email: kominfobjb@banjarbarukota.go.id | Telpon/Fax: 0511-6749126
       </p>
 <hr>
-No.{{date("d/m/y",strtotime($data_lapor->date))}}/00{{$data_lapor->id}}/kominfo
+No.{{date("d/m/y",strtotime($data_petugas->date))}}/00{{$data_petugas->id}}/kominfo
 </center>
 <br>
-Rekap Data Laporan Bulanan <strong>{{date("d/m/Y",strtotime($data_lapor->date))}}</strong>:
+Penilaian Kinerja Pegawai <strong>{{date("d/m/Y",strtotime($data_petugas->date))}}</strong>:
 <br><br>
 <table border='1'>
-<tr><td >Instansi Pelapor</td><td >:</td><td >{{$data_lapor->nama}}</td></tr>
-<tr><td >Laporan Masuk</td><td >:</td><td >{{$data_lapor->created_at}}</td></tr>
-
-@foreach($tb_disposisi as $data1)
-
-@endforeach
-
-@
-<tr><td >Laporan Selesai</td><td >:</td><td >{{$data1->created_at}}</td></tr>
-<tr><td >Petugas Pelaksana</td><td >:</td><td >{{$data1->id_petugas}}</td></tr>
+<tr><td >NIP</td><td >:</td><td >{{$data_petugas->nip}}</td></tr>
+<tr><td >Nama Petugas</td><td >:</td><td >{{$data_petugas->nama_petugas}}</td></tr>
+<tr><td >Pekerjaan Yang Diselesaikan</td><td >:</td><td >{{$data_petugas->pekerjaan_selesai}}</td></tr>
 </table>
 <p></p>
 

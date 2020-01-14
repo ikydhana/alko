@@ -17,7 +17,7 @@
 			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
-			$this->button_add = true;
+			$this->button_add = false;
 			$this->button_edit = true;
 			$this->button_delete = true;
 			$this->button_detail = true;
@@ -26,7 +26,7 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "tb_langkah_penanganan";
+			$this->table = "tb_disposisi";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
@@ -35,16 +35,18 @@
 			$this->col[] = ["label"=>"Tindak Lanjut","name"=>"id_tindak_lanjut","join"=>"tb_tindak_lanjut,nama_tindak_lanjut"];
 			$this->col[] = ["label"=>"Permasalahan","name"=>"permasalahan"];
 			$this->col[] = ["label"=>"Langkah Penanganan","name"=>"langkah_penanganan"];
-			$this->col[] = ["label"=>"Foto Lapangan","name"=>"pic_lap","image"=>true];
+			$this->col[] = ["label"=>"Foto Lapangan","name"=>"pic","image"=>true];
+			// $this->col[] = ["label"=>"Status Laporan","name"=>"status","join"=>"tb_lapor,status"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Laporan','name'=>'id_laporan','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,isi_ticket'];
+			$this->form[] = ['label'=>'Laporan','name'=>'id_laporan','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,isi_ticket','readonly'=>'true'];
 			$this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
 			$this->form[] = ['label'=>'Permasalahan','name'=>'permasalahan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Langkah Penanganan','name'=>'langkah_penanganan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			// $this->form[] = ['label'=>'Foto Lapangan','name'=>'pic_lap','type'=>'upload','validation'=>'image','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Dokumentasi Lapangan','name'=>'pic','type'=>'upload','validation'=>'image','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Status Laporan','name'=>'status','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -84,7 +86,7 @@
 	        | 
 	        */
 			$this->addaction = array();
-			// $this->addaction[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'icon'=>'fa fa-check','color'=>'success']; 
+			$this->addaction[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'icon'=>'fa fa-check','color'=>'success']; 
 
 	        /* 
 	        | ---------------------------------------------------------------------- 
@@ -120,7 +122,8 @@
 	        | @icon  = Icon from Awesome.
 	        | 
 	        */
-	        $this->index_button = array();
+			$this->index_button = array();
+
 
 
 
@@ -242,7 +245,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	            
+			$query->where('id_petugas',CRUDBooster::myId());
 	    }
 
 	    /*
@@ -263,8 +266,11 @@
 	    |
 	    */
 	    public function hook_before_add(&$postdata) {        
-	        //Your code here
-
+			//Your code here
+			$config['content'] = "Pekerjaan telah selesai".$postdata['id_laporan'];
+			$config['to'] = CRUDBooster::adminPath('../tb_lapor/add?id=[id]');
+			$config['id_cms_users'] = [1]; //The Id of the user that is going to receive notification.
+			CRUDBooster::sendNotification($config);
 	    }
 
 	    /* 
@@ -276,11 +282,6 @@
 	    */
 	    public function hook_after_add($id){
 	        //Your code here
-		$config['content'] = "Pekerjaan telah selesai";
-		$config['notification_command'] = CRUDBooster::myId();
-		$config['to'] = CRUDBooster::adminPath('../tb_lapor/add?id=[id]');
-		$config['id_cms_users'] = [1]; //The Id of the user that is going to receive notification.
-		CRUDBooster::sendNotification($config);
 	    }
 
 	    /* 
@@ -293,7 +294,13 @@
 	    */
 	    public function hook_before_edit(&$postdata,$id) {        
 	        //Your code here
-
+			// if (!$postdata['Belum Selesai'])  { 
+				// DB::table('tb_lapor')->where('id',$postdata['id_laporan'])->update(['status'=>'Selesai']);
+				// $config['content'] = "Pekerjaan telah selesai".$postdata['id_laporan'];
+				// $config['to'] = CRUDBooster::adminPath('../tb_lapor/add?id=[id]');
+				// $config['id_cms_users'] = [5]; //The Id of the user that is going to receive notification.
+				// CRUDBooster::sendNotification($config);
+			// }
 	    }
 
 	    /* 
@@ -335,7 +342,13 @@
 		// public function getSetStatus($status,$id) {
 		// 	DB::table('tb_lapor')->where('id',$id)->update(['status'=>$status]);
 		// 	CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
-		// }
+		// // }
+
+		public function getSetStatus($status,$id) {
+			DB::table('tb_disposisi')->where('id',$id)->update(['status'=>$status]);
+			// DB::table('tb_lapor')->where('id',$id)->update(['status'=>$status]);
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
+		}
 
 	    //By the way, you can still create your own method in here... :) 
 

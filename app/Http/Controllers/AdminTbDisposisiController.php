@@ -5,12 +5,12 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminTbPetugasController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminTbDisposisiController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "nama_petugas";
+			$this->title_field = "id";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
@@ -25,28 +25,29 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "tb_petugas";
+			$this->table = "tb_disposisi";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"NIP","name"=>"nip"];
-			$this->col[] = ["label"=>"Nama Petugas","name"=>"nama_petugas"];
-			$this->col[] = ["label"=>"Bidang Keahlian","name"=>"id_bidang_keahlian","join"=>"tb_bidang_keahlian,bidang_keahlian"];
+			// $this->col[] = ["label"=>"No Ticket","name"=>"no_ticket"];
+			$this->col[] = ["label"=>"Nama Pelapor","name"=>"id_laporan","join"=>"tb_lapor,nama_pelapor"];
+			$this->col[] = ["label"=>"Petugas Pelaksana","name"=>"id_petugas","join"=>"cms_users,name"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'NIP','name'=>'nip','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Nama Petugas','name'=>'nama_petugas','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Bidang Keahlian','name'=>'id_bidang_keahlian','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'bidang_keahlian,bidang_keahlian'];
+			// $this->form[] = ['label'=>'No Ticket','name'=>'no_ticket','type'=>'select2','datatable'=>'tb_lapor,no_ticket','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nama Pelapor','name'=>'id_laporan','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_lapor','datamodal_columns'=>'nama_pelapor,satuan_kerja'];
+			// $this->form[] = ['label'=>'Satuan Kerja','name'=>'satuan_kerja','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_skpd','datamodal_columns'=>'satuan_kerja,email'];
+			$this->form[] = ['label'=>'Petugas Pelaksana','name'=>'id_petugas','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'cms_users','datamodal_columns'=>'name'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'NIP','name'=>'nip','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Nama Petugas','name'=>'nama_petugas','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Bidang Keahlian','name'=>'id_bidang_keahlian','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'bidang_keahlian,bidang_keahlian'];
+			//$this->form[] = ["label"=>"No Ticket","name"=>"no_ticket","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Laporan","name"=>"id_laporan","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"laporan,id"];
+			//$this->form[] = ["label"=>"Petugas","name"=>"id_petugas","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"petugas,id"];
 			# OLD END FORM
 
 			/* 
@@ -75,7 +76,7 @@
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        | 
 	        */
-			$this->addaction = array();
+	        $this->addaction = array();
 
 
 	        /* 
@@ -234,7 +235,6 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	            
 	    }
 
 	    /*
@@ -319,6 +319,7 @@
 	        //Your code here
 
 	    }
+
 
 
 	    //By the way, you can still create your own method in here... :) 
