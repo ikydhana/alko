@@ -33,13 +33,13 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"No Ticket","name"=>"no_ticket"];
 			$this->col[] = ["label"=>"Nama Pelapor","name"=>"nama_pelapor"];
-			$this->col[] = ["label"=>"Satuan Kerja","name"=>"satuan_kerja","join"=>"tb_skpd,satuan_kerja"];
+			$this->col[] = ["label"=>"Satuan Kerja","name"=>"id_skpd","join"=>"tb_skpd,satuan_kerja"];
 			$this->col[] = ["label"=>"Isi Ticket","name"=>"isi_ticket"];
 			$this->col[] = ["label"=>"Tanggal Masuk","name"=>"created_at"];
 			// $this->col[] = ["label"=>"Tindak Lanjut","name"=>"id_tindak_lanjut","join"=>"tb_tindak_lanjut,nama_tindak_lanjut"];
 			$this->col[] = ["label"=>"Jenis Kendala","name"=>"id_bidang_keahlian","join"=>"tb_bidang_keahlian,bidang_keahlian"];
 			$this->col[] = ["label"=>"Status Ticket","name"=>"status"];
-			$this->col[] = ["label"=>"Tingkat Prioritas Laporan","name"=>"priority_level"];
+			$this->col[] = ["label"=>"Tingkat Prioritas Laporan","name"=>"id_priority","join"=>"tb_priority,tingkat_priority"];
 			// $this->col[] = ["label"=>"Petugas Pelaksana","name"=>"id_petugas","join"=>"tb_petugas,nama_petugas"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -47,13 +47,13 @@
 			$this->form = [];
 			$this->form[] = ['label'=>'No Ticket','name'=>'no_ticket','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
 			$this->form[] = ['label'=>'Nama Pelapor','name'=>'nama_pelapor','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Satuan Kerja','name'=>'satuan_kerja','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_skpd','datamodal_columns'=>'satuan_kerja,email'];
+			$this->form[] = ['label'=>'Satuan Kerja','name'=>'id_skpd','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_skpd','datamodal_columns'=>'satuan_kerja,email'];
 			$this->form[] = ['label'=>'Isi Ticket','name'=>'isi_ticket','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			// $this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
 			$this->form[] = ['label'=>'Jenis Kendala','name'=>'id_bidang_keahlian','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_bidang_keahlian,bidang_keahlian'];
 			$this->form[] = ['label'=>'Status Ticket','name'=>'status','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true','value'=>'Belum Selesai'];
 			// $this->form[] = ['label'=>'Petugas','name'=>'id_petugas','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_petugas','datamodal_columns'=>'nip,nama_petugas'];
-			$this->form[] = ['label'=>'Tingkat Prioritas Laporan','name'=>'priority_level','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-9','dataenum'=>'Rendah;Sedang;Tinggi'];
+			$this->form[] = ['label'=>'Tingkat Prioritas Laporan','name'=>'id_priority','type'=>'select2','validation'=>'required|min:0','width'=>'col-sm-10','datatable'=>'tb_priority,tingkat_priority'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -139,6 +139,7 @@
 			$this->index_button = array();
 			// $this->index_button[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'label'=>'Verifikasi','icon'=>'fa fa-check','color'=>'success'];
 			$this->index_button[] = ['url'=>CRUDBooster::mainpath('rekap-lapor/'),'label'=>'Cetak Lapor','icon'=>'fa fa-print','color'=>'success'];
+			$this->index_button[] = ['url'=>CRUDBooster::mainpath('rekap-rank/'),'label'=>'Cetak Rank','icon'=>'fa fa-print','color'=>'success'];
 
 
 
@@ -357,10 +358,32 @@
 
 		public function getRekapLapor(){
 			$data['tb_lapor'] = DB::table('tb_lapor')
-						  ->get();
+						->join('tb_disposisi','tb_disposisi.id_lapor','=','tb_lapor.id')
+						->join('tb_skpd','tb_skpd.id','=','tb_lapor.id_skpd')
+						->join('tb_bidang_keahlian','tb_bidang_keahlian.id','=','tb_lapor.id_bidang_keahlian')
+						->join('cms_users', 'tb_disposisi.id_petugas','=','cms_users.id')
+						->SELECT ('tb_lapor.id_skpd','tb_skpd.satuan_kerja','tb_bidang_keahlian.bidang_keahlian','tb_lapor.created_at','tb_disposisi.created_at','tb_disposisi.id_petugas','cms_users.name','tb_lapor.status')
+						->where('tb_lapor.status', "Selesai")
+						->get();
   	        $data['tb_disposisi'] = DB::table('tb_disposisi')
-						  ->get();
+						->get();
+			$data['tb_petugas'] = DB::table('tb_petugas')
+						->get();
+			$data['tb_skpd'] = DB::table('tb_skpd')
+						->get();
 	 		$pdf = PDF::loadView('rekap_bul',$data)
+				  ->setPaper('a4', 'potrait');
+	  
+				  
+			return $pdf->stream('Rekap Data Laporan.pdf');
+		}
+		public function getRekapRank(){
+			$data['cms_users'] = DB::table('cms_users')
+						->where('cms_users.id_cms_privileges', 2)
+					  	->get();
+			$data['tb_disposisi'] = DB::table('tb_disposisi')
+						->get();
+			$pdf = PDF::loadView('ranking',$data)
 				  ->setPaper('a4', 'potrait');
 	  
 				  

@@ -32,6 +32,7 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama Instansi","name"=>"satuan_kerja"];
 			$this->col[] = ["label"=>"Email","name"=>"email"];
+			$this->col[] = ["label"=>"Jumlah Laporan Masuk","name"=>"point_lapor"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE

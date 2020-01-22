@@ -13,7 +13,7 @@ function indonesia($now) {
 	$bln = new  \Carbon\Carbon($now);
 	setlocale(LC_TIME, 'IND');
 		
-	return $bln->formatLocalized('%Y');
+	return $bln->formatLocalized(' %B %Y');
 } 
 
 @endphp
@@ -23,9 +23,7 @@ function indonesia($now) {
   </head>
 <body>
 
-
-
-<img style="width:80;float:left" src="https://upload.wikimedia.org/wikipedia/commons/6/63/Lambang_Kota_Banjarbaru.png">    
+<img style="width:80;float:left" src="http://dkp.banjarbarukota.go.id/themes/smartadmin/img/images/favicon.png">    
 <center>
 <p style="text-align:center;text-transform: uppercase;">
   PEMERINTAH KOTA BANJARBARU
@@ -46,39 +44,33 @@ function indonesia($now) {
 @foreach($tb_disposisi as $data_no)
 
 @endforeach
-<p><b><u><strong>Laporan Tahunan</strong></u></b></p>
-Nomor : 0{{$data_no->id_lapor}}/Lap/Kominfo
+<p><u><b>Lampiran Penilaian</b></u></p>
+Nomor : 0{{$data_no->id_lapor}}/Pen/Kominfo
 </center>
 <br>
-Rekap Data Laporan Tahun <strong>{{indonesia($bln)}}</strong>:
+Penilaian Kinerja Pegawai Bulan <strong>{{indonesia($bln)}}</strong>:
+<br><br>
+<table border='1''>
+<tr>
+<th>Nama Petugas</th>
+</tr>
+@foreach($cms_users as $data_lapor)
+<tr>
+<th>{{$data_lapor->name}}</th>
+</tr>
+@endforeach
+</table>
+<table border='1' style='float:right;margin-right:385px;margin-top:-140px;text-align:center;'>
+<tr>
+<th>Jumlah Point</th>
+</tr>
+@foreach($cms_users as $data_nilai)
+<tr>
+<th>{{$data_nilai->point}}</th>
+</tr>
+@endforeach
+</table>
 <br></br>
-<table border='1' style='text-align:center;'>
-<tr>
-<th>Instansi Pelapor</th>
-<th>Laporan Diterima</th>
-<th>Status Laporan</th>
-</tr>
-@foreach($tb_lapor as $data_lapor)
-<tr>
-<th >{{$data_lapor->id_skpd}}</th>
-<th >{{$data_lapor->created_at}}</th>
-<th >{{$data_lapor->status}}</th>
-</tr>
-@endforeach
-</table>
-
-<table border='1' style='float:right;margin-right:35px;margin-top:-120px;text-align:center;'>
-<tr>
-<th>Laporan Diselesaikan</th>
-<th>Petugas Pelaksana</th>
-</tr>
-@foreach($tb_disposisi as $data1)
-<tr>
-<td >{{$data1->created_at}}</td>
-<td >{{$data1->id_petugas}}</td>
-</tr>
-@endforeach
-</table>
 <br></br>
 <br></br>
 <br></br>
@@ -91,5 +83,5 @@ Rekap Data Laporan Tahun <strong>{{indonesia($bln)}}</strong>:
                     <br>
                     <br>
                     <br>
-                    <h4>Khairurrijal, S.Stp</h4>
+                    <h4>Khairurrijal,S.Stp</h4>
 </div>
