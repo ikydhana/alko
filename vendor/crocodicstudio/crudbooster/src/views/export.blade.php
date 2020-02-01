@@ -1,6 +1,35 @@
 @if(Request::input('fileformat') == 'pdf')
-    <h3>{{Request::input('filename')}}</h3>
 @endif
+@php
+function indo($tgl) {
+	$dt = new  \Carbon\Carbon($tgl);
+	setlocale(LC_TIME, 'IND');
+		
+	return $dt->formatLocalized(' %e %B %Y');
+} 
+
+@endphp
+<img style="width:80;float:left" src="https://upload.wikimedia.org/wikipedia/commons/6/63/Lambang_Kota_Banjarbaru.png">    
+<center>
+<p style="text-align:center;text-transform: uppercase;">
+  PEMERINTAH KOTA BANJARBARU
+      </p>
+      <p style="text-align:center;text-transform: uppercase;margin-top:-15px;font-size:25px">
+        DINAS KOMUNIKASI DAN INFORMATIKA
+      </p>
+      <p style="text-align:center;margin-top:-15px">
+  Gedung Diskominfo Banjarbaru Jl. Pangeran Suriansyah no.5
+      </p>
+      <p style="text-align:center;margin-top:-15px">
+  Loktabat Utara, Banjarbaru Utara Kota Banjarbaru,70711 Kalimantan Selatan, Indonesia
+      </p>
+    <p style="text-align:center;margin-top:-15px">
+    Email: kominfobjb@banjarbarukota.go.id | Telpon/Fax: 0511-6749126
+      </p>
+<hr>
+<br>
+<br>
+<br>
 <table border='1' width='100%' cellpadding='3' cellspacing="0" style='border-collapse: collapse;font-size:12px'>
     <thead>
     <tr>
@@ -88,6 +117,17 @@
     @endif
     </tbody>
 </table>
+<br>
+<br>
+<br>
+<div style='text-align:right;margin-top:-15px;'>
+                    <h4>Banjarbaru, {{indo($dt)}}</h4>
+                    {{$now}}
+                    <br>
+                    <br>
+                    <br>
+                    <h4>Khairurrijal,S.Stp</h4>
+</div>
 <script type="text/php">
     if ( isset($pdf) ) {
         $font = Font_Metrics::get_font("helvetica", "bold");
