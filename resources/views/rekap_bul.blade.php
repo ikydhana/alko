@@ -1,15 +1,32 @@
+@php
+function indo($tgl) {
+	$dt = new  \Carbon\Carbon($tgl);
+	setlocale(LC_TIME, 'IND');
+		
+	return $dt->formatLocalized(' %e %B %Y');
+} 
+
+@endphp
+
+@php
+function indonesia($now) {
+	$bln = new  \Carbon\Carbon($now);
+	setlocale(LC_TIME, 'IND');
+		
+	return $bln->formatLocalized(' %B %Y');
+} 
+
+@endphp
+
 <head>
     <title>Laporan</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
   </head>
 <body>
 
-@foreach($tb_lapor as $data_lapor)
-
-@endforeach
 
 
-
-<img style="width:80;float:left" src="http://dkp.banjarbarukota.go.id/themes/smartadmin/img/images/favicon.png">    
+<img style="width:80;float:left" src="https://upload.wikimedia.org/wikipedia/commons/6/63/Lambang_Kota_Banjarbaru.png">    
 <center>
 <p style="text-align:center;text-transform: uppercase;">
   PEMERINTAH KOTA BANJARBARU
@@ -27,26 +44,54 @@
     Email: kominfobjb@banjarbarukota.go.id | Telpon/Fax: 0511-6749126
       </p>
 <hr>
-No.{{date("d/m/y",strtotime($data_lapor->date))}}/00{{$data_lapor->id}}/kominfo
-</center>
-<br>
-Rekap Data Laporan Bulanan <strong>{{date("d/m/Y",strtotime($data_lapor->date))}}</strong>:
-<br><br>
-<table border='1'>
-<tr><td >Instansi Pelapor</td><td >:</td><td >{{$data_lapor->nama}}</td></tr>
-<tr><td >Laporan Masuk</td><td >:</td><td >{{$data_lapor->created_at}}</td></tr>
-
-@foreach($tb_disposisi as $data1)
+@foreach($tb_disposisi as $data_no)
 
 @endforeach
-
-@
-<tr><td >Laporan Selesai</td><td >:</td><td >{{$data1->created_at}}</td></tr>
-<tr><td >Petugas Pelaksana</td><td >:</td><td >{{$data1->id_petugas}}</td></tr>
-</table>
-<p></p>
-
-                    <!-- <h4 style='text-align:right;'>Banjarbaru,{{date("d/m/Y",strtotime($data_lapor->date))}}</h4>
-                    <div><img src='https://officialdevbjb.com/api/img/signature.png' width='150px' align='right' ></div> -->
-
-</body>
+<p><b><u><strong>Laporan Bulanan</strong></u></b></p>
+Nomor : 0{{$data_no->id_lapor}}/Lap/Kominfo
+</center>
+<br>
+Rekap Data Laporan Bulan <strong>{{indonesia($bln)}}</strong>:
+<br></br>
+<table border ='1'>
+			<thead>
+				<tr>
+          <th>No Ticket</th>
+					<th>Instansi Pelapor</th>
+					<th>Tanggal Masuk</th>
+					<th>Tanggal Selesai</th>
+					<th>Status Laporan</th>
+          <th>Petugas Pelaksana</th>
+          <th>Jenis Laporan</th>
+				</tr>
+      </thead>
+      <tbody>
+				@foreach($tb_lapor as $lapor)
+				<tr>
+					<td>{{$lapor->no_ticket }}</td>
+					<td>{{$lapor->id_skpd}}</td>
+          <td>{{$lapor->tanggal_masuk}}</td>
+          <td>{{$lapor->status}}</td>
+          @endforeach
+        @foreach($tb_disposisi as $disposisi)
+					<td>{{$disposisi->tanggal_selesai}}</td>
+          <td>{{$disposisi->id_petugas}}</td>
+          @endforeach      
+          @foreach($tb_bidang_keahlian as $bidang)
+          <td>{{$bidang->bidang_keahlian}}</td>  
+          @endforeach
+        </tr>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div style='text-align:right;margin-top:-15px;'>
+                    <h4>Banjarbaru, {{indo($dt)}}</h4>
+                    {{$now}}
+                    <br>
+                    <br>
+                    <br>
+                    <h4>Khairurrijal,S.Stp</h4>
+</div>

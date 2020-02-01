@@ -31,16 +31,16 @@
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
 			// $this->col[] = ["label"=>"No Ticket","name"=>"no_ticket"];
-			$this->col[] = ["label"=>"Nama Pelapor","name"=>"id_laporan","join"=>"tb_lapor,nama_pelapor"];
+			$this->col[] = ["label"=>"Nama Pelapor","name"=>"id_lapor","join"=>"tb_lapor,nama_pelapor"];
 			$this->col[] = ["label"=>"Petugas Pelaksana","name"=>"id_petugas","join"=>"cms_users,name"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			// $this->form[] = ['label'=>'No Ticket','name'=>'no_ticket','type'=>'select2','datatable'=>'tb_lapor,no_ticket','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Nama Pelapor','name'=>'id_laporan','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_lapor','datamodal_columns'=>'nama_pelapor,satuan_kerja'];
+			$this->form[] = ['label'=>'Nama Pelapor','name'=>'id_lapor','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_lapor','datamodal_columns'=>'nama_pelapor','datamodal_columns_alias'=>'Nama Pelapor'];
 			// $this->form[] = ['label'=>'Satuan Kerja','name'=>'satuan_kerja','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_skpd','datamodal_columns'=>'satuan_kerja,email'];
-			$this->form[] = ['label'=>'Petugas Pelaksana','name'=>'id_petugas','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'cms_users','datamodal_columns'=>'name'];
+			$this->form[] = ['label'=>'Petugas Pelaksana','name'=>'id_petugas','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'cms_users','datamodal_where'=>'id_cms_privileges = 2','datamodal_columns'=>'name, point','datamodal_columns_alias'=>'Nama Petugas, Jumlah Point'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -234,7 +234,8 @@
 	    |
 	    */
 	    public function hook_query_index(&$query) {
-	        //Your code here
+			//Your code here
+			
 	    }
 
 	    /*

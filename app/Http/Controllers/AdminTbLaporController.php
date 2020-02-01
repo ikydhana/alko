@@ -15,15 +15,15 @@
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = true;
-			$this->button_bulk_action = true;
+			$this->button_table_action = false;
+			$this->button_bulk_action = false;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
-			$this->button_edit = true;
-			$this->button_delete = true;
-			$this->button_detail = true;
-			$this->button_show = true;
-			$this->button_filter = true;
+			$this->button_edit = false;
+			$this->button_delete = false;
+			$this->button_detail = false;
+			$this->button_show = false;
+			$this->button_filter = false;
 			$this->button_import = false;
 			$this->button_export = false;
 			$this->table = "tb_lapor";
@@ -31,29 +31,21 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"No Ticket","name"=>"no_ticket"];
-			$this->col[] = ["label"=>"Nama Pelapor","name"=>"nama_pelapor"];
-			$this->col[] = ["label"=>"Satuan Kerja","name"=>"satuan_kerja","join"=>"tb_skpd,satuan_kerja"];
-			$this->col[] = ["label"=>"Isi Ticket","name"=>"isi_ticket"];
-			$this->col[] = ["label"=>"Tanggal Masuk","name"=>"created_at"];
-			// $this->col[] = ["label"=>"Tindak Lanjut","name"=>"id_tindak_lanjut","join"=>"tb_tindak_lanjut,nama_tindak_lanjut"];
-			$this->col[] = ["label"=>"Jenis Kendala","name"=>"id_bidang_keahlian","join"=>"tb_bidang_keahlian,bidang_keahlian"];
-			$this->col[] = ["label"=>"Status Ticket","name"=>"status"];
-			$this->col[] = ["label"=>"Tingkat Prioritas Laporan","name"=>"priority_level"];
-			// $this->col[] = ["label"=>"Petugas Pelaksana","name"=>"id_petugas","join"=>"tb_petugas,nama_petugas"];
+
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'No Ticket','name'=>'no_ticket','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
 			$this->form[] = ['label'=>'Nama Pelapor','name'=>'nama_pelapor','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Satuan Kerja','name'=>'satuan_kerja','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_skpd','datamodal_columns'=>'satuan_kerja,email'];
+			$this->form[] = ['label'=>'Satuan Kerja','name'=>'id_skpd','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_skpd','datamodal_columns'=>'satuan_kerja,email','datamodal_columns_alias'=>'Satuan Kerja, Email'];
 			$this->form[] = ['label'=>'Isi Ticket','name'=>'isi_ticket','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Tanggal Masuk Laporan','name'=>'tanggal_masuk','type'=>'date'];
 			// $this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
 			$this->form[] = ['label'=>'Jenis Kendala','name'=>'id_bidang_keahlian','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_bidang_keahlian,bidang_keahlian'];
 			$this->form[] = ['label'=>'Status Ticket','name'=>'status','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true','value'=>'Belum Selesai'];
 			// $this->form[] = ['label'=>'Petugas','name'=>'id_petugas','type'=>'datamodal','width'=>'col-sm-10','datamodal_table'=>'tb_petugas','datamodal_columns'=>'nip,nama_petugas'];
-			$this->form[] = ['label'=>'Tingkat Prioritas Laporan','name'=>'priority_level','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-9','dataenum'=>'Rendah;Sedang;Tinggi'];
+			$this->form[] = ['label'=>'Tingkat Prioritas Laporan','name'=>'id_priority','type'=>'select2','validation'=>'required|min:0|max:255','width'=>'col-sm-9','datatable'=>'tb_priority,tingkat_priority'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -138,8 +130,6 @@
 	        */
 			$this->index_button = array();
 			// $this->index_button[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'label'=>'Verifikasi','icon'=>'fa fa-check','color'=>'success'];
-			$this->index_button[] = ['url'=>CRUDBooster::mainpath('rekap-lapor/'),'label'=>'Cetak Lapor','icon'=>'fa fa-print','color'=>'success'];
-
 
 
 
@@ -163,8 +153,6 @@
 	        |
 	        */
 			$this->index_statistic = array();
-			$this->index_statistic[] = ['label'=>'Total Laporan','count'=>DB::table('tb_lapor')->count(),'icon'=>'fa fa-check','color'=>'success'];
-
 
 	        /*
 	        | ---------------------------------------------------------------------- 
@@ -354,18 +342,6 @@
 		// 	CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
 		// }
 
-
-		public function getRekapLapor(){
-			$data['tb_lapor'] = DB::table('tb_lapor')
-						  ->get();
-  	        $data['tb_disposisi'] = DB::table('tb_disposisi')
-						  ->get();
-	 		$pdf = PDF::loadView('rekap_bul',$data)
-				  ->setPaper('a4', 'potrait');
-	  
-				  
-			return $pdf->stream('Rekap Data Laporan.pdf');
-		}
 
 
 	    //By the way, you can still create your own method in here... :) 

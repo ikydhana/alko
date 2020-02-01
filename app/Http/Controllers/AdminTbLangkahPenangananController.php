@@ -15,38 +15,37 @@
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = true;
-			$this->button_bulk_action = true;
+			$this->button_bulk_action = false;
 			$this->button_action_style = "button_icon";
 			$this->button_add = false;
 			$this->button_edit = true;
-			$this->button_delete = true;
-			$this->button_detail = true;
-			$this->button_verification = true;
-			$this->button_show = true;
+			$this->button_delete = false;
+			$this->button_detail = false;
+			$this->button_show = false;
 			$this->button_filter = true;
 			$this->button_import = false;
-			$this->button_export = false;
+			$this->button_export = true;
 			$this->table = "tb_disposisi";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Laporan","name"=>"id_laporan","join"=>"tb_lapor,isi_ticket"];
+			$this->col[] = ["label"=>"Laporan","name"=>"id_lapor","join"=>"tb_lapor,isi_ticket"];
 			$this->col[] = ["label"=>"Tindak Lanjut","name"=>"id_tindak_lanjut","join"=>"tb_tindak_lanjut,nama_tindak_lanjut"];
 			$this->col[] = ["label"=>"Permasalahan","name"=>"permasalahan"];
 			$this->col[] = ["label"=>"Langkah Penanganan","name"=>"langkah_penanganan"];
 			$this->col[] = ["label"=>"Foto Lapangan","name"=>"pic","image"=>true];
-			// $this->col[] = ["label"=>"Status Laporan","name"=>"status","join"=>"tb_lapor,status"];
+			$this->col[] = ["label"=>"Tanggal Selesai","name"=>"tanggal_selesai"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Laporan','name'=>'id_laporan','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,isi_ticket','readonly'=>'true'];
+			$this->form[] = ['label'=>'Laporan','name'=>'id_lapor','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_lapor,isi_ticket','readonly'=>'true'];
 			$this->form[] = ['label'=>'Tindak Lanjut','name'=>'id_tindak_lanjut','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tb_tindak_lanjut,nama_tindak_lanjut'];
 			$this->form[] = ['label'=>'Permasalahan','name'=>'permasalahan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Langkah Penanganan','name'=>'langkah_penanganan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Dokumentasi Lapangan','name'=>'pic','type'=>'upload','validation'=>'image','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Status Laporan','name'=>'status','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
+			$this->form[] = ['label'=>'Tanggal Selesai','name'=>'tanggal_selesai','type'=>'date'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -86,7 +85,7 @@
 	        | 
 	        */
 			$this->addaction = array();
-			$this->addaction[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'icon'=>'fa fa-check','color'=>'success']; 
+			// $this->addaction[] = ['url'=>CRUDBooster::mainpath('set-status/Selesai/[id]'),'icon'=>'fa fa-check','color'=>'success']; 
 
 	        /* 
 	        | ---------------------------------------------------------------------- 
@@ -344,11 +343,11 @@
 		// 	CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
 		// // }
 
-		public function getSetStatus($status,$id) {
-			DB::table('tb_disposisi')->where('id',$id)->update(['status'=>$status]);
-			// DB::table('tb_lapor')->where('id',$id)->update(['status'=>$status]);
-			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
-		}
+		// public function getSetStatus($status,$id) {
+		// 	DB::table('tb_disposisi','tb_lapor')->where('id',$id)->update(['status'=>$status]);
+		// 	// DB::table('tb_lapor')->where('id',$id)->update(['status'=>$status]);
+		// 	CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"Pekerjaan telah diselesaikan!","Selesai");
+		// }
 
 	    //By the way, you can still create your own method in here... :) 
 

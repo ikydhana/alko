@@ -16,7 +16,6 @@
 
 }
 </style>
-
     <!-- Logo -->
     <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}' class="logo">{{CRUDBooster::getSetting('appname')}}</a>
 
@@ -31,7 +30,7 @@
         </div>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav"> 
+            <ul class="nav navbar-nav">
 
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title='Notifications' aria-expanded="false">

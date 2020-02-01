@@ -12,7 +12,7 @@
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
 			$this->title_field = "nama_instansi";
 			$this->limit = "20";
-			$this->orderby = "id,desc";
+			$this->orderby = "point_skpd,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = false;
 			$this->button_bulk_action = false;
@@ -21,10 +21,10 @@
 			$this->button_edit = false;
 			$this->button_delete = false;
 			$this->button_detail = false;
-			$this->button_show = true;
-			$this->button_filter = true;
+			$this->button_show = false;
+			$this->button_filter = false;
 			$this->button_import = false;
-			$this->button_export = false;
+			$this->button_export = true;
 			$this->table = "tb_skpd";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
@@ -32,12 +32,13 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama Instansi","name"=>"satuan_kerja"];
 			$this->col[] = ["label"=>"Email","name"=>"email"];
+			$this->col[] = ["label"=>"Jumlah Laporan","name"=>"point_skpd"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
-			$this->form = [];
-			$this->form[] = ['label'=>'Nama Instansi','name'=>'satuan_kerja','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:tb_skpd','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
+			// $this->form = [];
+			// $this->form[] = ['label'=>'Nama Instansi','name'=>'satuan_kerja','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:tb_skpd','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
