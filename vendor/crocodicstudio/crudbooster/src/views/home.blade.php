@@ -1,6 +1,9 @@
 @extends('crudbooster::admin_template')
 
 @section('content')
+<img style="display: block;margin-left: auto;margin-right: auto;width: 50%;" src="https://diskominfo.banjarbarukota.go.id/oriz/img/features/gg.gif">
+<br>
+<br>
 <h1><p style="text-align:center;"><b>ALKO (Aplikasi Lapor Kendala Online)</b></p></h1>
 <br>
 <br>
