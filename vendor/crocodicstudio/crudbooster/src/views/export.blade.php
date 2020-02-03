@@ -127,6 +127,8 @@ function indo($tgl) {
                     <br>
                     <br>
                     <h4>Khairurrijal,S.Stp</h4>
+                    <br>
+                    <h4>198110102000121003</h4>
 </div>
 <script type="text/php">
     if ( isset($pdf) ) {
