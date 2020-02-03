@@ -4,16 +4,15 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
-	use PDF;
 
-	class AdminTbLapor23Controller extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminTbLapor24Controller extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
 			$this->title_field = "nama_pelapor";
 			$this->limit = "20";
-			$this->orderby = "id,asc";
+			$this->orderby = "id,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = false;
 			$this->button_bulk_action = false;
@@ -22,8 +21,8 @@
 			$this->button_edit = false;
 			$this->button_delete = false;
 			$this->button_detail = false;
-			$this->button_show = false;
-			$this->button_filter = false;
+			$this->button_show = true;
+			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = true;
 			$this->table = "tb_lapor";
@@ -33,12 +32,11 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"No Ticket","name"=>"no_ticket"];
 			$this->col[] = ["label"=>"Nama Pelapor","name"=>"nama_pelapor"];
-			$this->col[] = ["label"=>"Satuan kerja","name"=>"id_skpd","join"=>"tb_skpd,satuan_kerja"];
+			$this->col[] = ["label"=>"Satuan Kerja","name"=>"id_skpd","join"=>"tb_skpd,satuan_kerja"];
 			$this->col[] = ["label"=>"Isi Ticket","name"=>"isi_ticket"];
 			$this->col[] = ["label"=>"Jenis Laporan","name"=>"id_bidang_keahlian","join"=>"tb_bidang_keahlian,bidang_keahlian"];
-			$this->col[] = ["label"=>"Tanggal Masuk Laporan","name"=>"tanggal_masuk"];	
+			$this->col[] = ["label"=>"Tanggal Masuk Laporan","name"=>"tanggal_masuk"];
 			$this->col[] = ["label"=>"Status Laporan","name"=>"status"];
-			$this->col[] = ["label"=>"Tanggal Selesai","name"=>"tanggal_selesai"];
 			$this->col[] = ["label"=>"Tingkat Priority","name"=>"id_priority","join"=>"tb_priority,tingkat_priority"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -54,8 +52,10 @@
 			//$this->form[] = ["label"=>"Skpd","name"=>"id_skpd","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"skpd,id"];
 			//$this->form[] = ["label"=>"Isi Ticket","name"=>"isi_ticket","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
 			//$this->form[] = ["label"=>"Bidang Keahlian","name"=>"id_bidang_keahlian","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"bidang_keahlian,id"];
+			//$this->form[] = ["label"=>"Tanggal Masuk","name"=>"tanggal_masuk","type"=>"date","required"=>TRUE,"validation"=>"required|date"];
 			//$this->form[] = ["label"=>"Status","name"=>"status","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
 			//$this->form[] = ["label"=>"Priority","name"=>"id_priority","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"priority,id"];
+			//$this->form[] = ["label"=>"Tanggal Selesai","name"=>"tanggal_selesai","type"=>"date","required"=>TRUE,"validation"=>"required|date"];
 			# OLD END FORM
 
 			/* 
@@ -121,8 +121,7 @@
 	        | @icon  = Icon from Awesome.
 	        | 
 	        */
-			$this->index_button = array();
-			// $this->index_button[] = ['url'=>CRUDBooster::mainpath('rekap-lapor/'),'label'=>'Cetak Lapor','icon'=>'fa fa-print','color'=>'success'];
+	        $this->index_button = array();
 
 
 
@@ -134,10 +133,7 @@
 	        | @color = Default is none. You can use bootstrap success,info,warning,danger,primary.        
 	        | 
 	        */
-			$this->table_row_color = array();     	          
-			$this->table_row_color[] = ['condition'=>"[id_priority] == '1'","color"=>"success"];
-			$this->table_row_color[] = ['condition'=>"[id_priority] == '2'","color"=>"warning"];
-			$this->table_row_color[] = ['condition'=>"[id_priority] == '3'","color"=>"danger"];
+	        $this->table_row_color = array();     	          
 
 	        
 	        /*
@@ -147,7 +143,7 @@
 	        | @label, @count, @icon, @color 
 	        |
 	        */
-			$this->index_statistic = array();
+	        $this->index_statistic = array();
 
 
 
@@ -247,7 +243,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-			$query->where('status','Selesai');
+			$query->where('status','Belum Selesai');
 	    }
 
 	    /*
@@ -334,24 +330,6 @@
 	    }
 
 
-		// public function getRekapLapor(){
-		// 	$data['tb_lapor'] = DB::table('tb_lapor')
-		// 				->join('tb_disposisi','tb_disposisi.id_lapor','=','tb_lapor.id')
-		// 				->join('tb_skpd','tb_skpd.id','=','tb_lapor.id_skpd')
-		// 				->join('tb_bidang_keahlian','tb_bidang_keahlian.id','=','tb_lapor.id_bidang_keahlian')
-		// 				->join('cms_users', 'tb_disposisi.id_petugas','=','cms_users.id')
-		// 				// ->SELECT ('tb_lapor.id_skpd','tb_skpd.satuan_kerja','tb_bidang_keahlian.bidang_keahlian','tb_lapor.created_at','tb_disposisi.created_at','tb_disposisi.id_petugas')
-		// 				->get();
-  	    //     $data['tb_disposisi'] = DB::table('tb_disposisi')
-		// 				->get();
-		// 	$data['tb_bidang_keahlian'] = DB::table('tb_bidang_keahlian')
-		// 				->get();
-	 	// 	$pdf = PDF::loadView('rekap_bul',$data)
-		// 		  ->setPaper('a4', 'potrait');
-	  
-				  
-		// 	return $pdf->stream('Rekap Data Laporan.pdf');
-		// }
 
 	    //By the way, you can still create your own method in here... :) 
 
